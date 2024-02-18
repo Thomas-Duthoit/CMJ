@@ -13,6 +13,7 @@ typedef struct  //definie la structure d'un joueur
 } T_joueur;
 
 int coup(T_Position *p);
+int coupV2(T_Position *p);
 
 
 int main() {  // Point d'entré du programme
@@ -22,6 +23,7 @@ int main() {  // Point d'entré du programme
 
     T_Position p = getPositionInitiale();  // On récupére la position initiale du plateau
     T_ListeCoups l = getCoupsLegaux(p);
+    T_Score s = {0, 0, 0, 0};  // Par défaut, les scores sont de 0 pour chaque joueurs
 
 
     printf("Nom Joueur 1: %s   -   Trait: %s\n", joueur1.pseudo, COLNAME(joueur1.trait));
@@ -30,7 +32,15 @@ int main() {  // Point d'entré du programme
 
 	printf("Depuis la position initiale du jeu, il y a %d coups possibles\n", l.nb);
 	printf("Depuis la position initiale du jeu, le trait est aux %ss\n", COLNAME(p.trait));
-    coup(&p);
+    printf("Score actuel: ");
+    afficherScore(s);
+    // printf("\nListe des coups possibles:\n");
+    // afficherListeCoups(l);
+    // coup(&p);
+    printf("Position actuelle:\n");
+    afficherPosition(p);
+    coupV2(&p);
+    afficherPosition(p);
     return 0;
 }
 
@@ -46,4 +56,19 @@ int coup(T_Position *p){
         return 1;
     }
     else return coup(p);
+}
+
+int coupV2(T_Position *p) {
+    int depart, fin;
+    printf("Quel pion/pile souhaitez vous utiliser ? ");
+    scanf("%d", &depart);
+    printf("Voisins de la case '%d': ", depart);
+    listerVoisins(depart);
+    printf("Où souhaitez vous le poser ? ");
+    scanf("%d", &fin);  
+    if (estValide(*p, depart, fin)) {
+        jouerCoup(*p, depart, fin);
+        return 1;
+    }
+    else return coupV2(p);
 }
