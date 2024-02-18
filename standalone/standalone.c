@@ -40,7 +40,7 @@ int main() {  // Point d'entré du programme
     printf("Position actuelle:\n");
     afficherPosition(p);
     coupV2(&p);
-    afficherPosition(p);
+    // afficherPosition(p);
     return 0;
 }
 
@@ -60,14 +60,15 @@ int coup(T_Position *p){
 
 int coupV2(T_Position *p) {
     int depart, fin;
-    printf("Quel pion/pile souhaitez vous utiliser ? ");
+    printf("Quel pile souhaitez vous utiliser ? ");
     scanf("%d", &depart);
     printf("Voisins de la case '%d': ", depart);
     listerVoisins(depart);
-    printf("Où souhaitez vous le poser ? ");
+    printf("Où souhaitez vous la poser ? ");
     scanf("%d", &fin);  
     if (estValide(*p, depart, fin)) {
-        jouerCoup(*p, depart, fin);
+        *p = jouerCoup(*p, depart, fin);
+        afficherPosition(*p);
         return 1;
     }
     else return coupV2(p);

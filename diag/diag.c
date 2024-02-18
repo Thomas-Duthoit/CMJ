@@ -1,3 +1,3 @@
 #include <stdio.h>
 
-int main() {return 0;}
+int main() {printf("PAS ENCORE CODE"); return 0;}
