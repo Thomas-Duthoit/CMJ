@@ -2,16 +2,25 @@
 #include <avalam.h>
 #include <topologie.h>
 
+#define CHEMIN_PAR_DEFAUT "./web/data"
+
+int ecrireJSON(T_Position p, char *chemin);
+void format(char* ch);
 
 int main(int argc, char* argv[]) 
 {
+    T_Position p;
+    T_Score s;
+    char chemin[100];
     if(argc != 3)
     {
         printf("diag <numDiag> <fen>\n");
-        return 1;
+        return -1;
     }
     printf("Diagramme %s\n", argv[1]);
     printf("Fen : %s\n", argv[2]);
+    printf("Fichier (sera créé dans le répertoire ./web/data s'il existe) ? [diag.js] ");
+    scanf("%s", chemin);
     return 0;
 }
 
@@ -51,11 +60,6 @@ int ecrireJSON(T_Position p, char *chemin) {
     fclose(fichier);
     return 1;
 }
-
-
-
-
-
 
 
 // thomas was here :)
