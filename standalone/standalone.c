@@ -6,6 +6,8 @@
 #define PSEUDO_PAR_DEFAUT_J1 "J1"
 #define PSEUDO_PAR_DEFAUT_J2 "J2"
 
+#define CHEMIN_PAR_DEFAUT "./web/data/refresh-data.js"
+
 typedef struct  //definie la structure d'un joueur
 {
     int trait;
@@ -13,11 +15,17 @@ typedef struct  //definie la structure d'un joueur
 } T_joueur;
 
 //int coup(T_Position *p);
-void coupV2(T_Position *p);
-void coupV3(T_Position *p);
-int ecrireJSON(T_Position p);
+//void coupV2(T_Position *p);
+int coupV3(T_Position *p);
+int ecrireJSON(T_Position p, char *chemin);
 
-int main() {  // Point d'entré du programme
+/*
+TODO: finir le jeu: étape 1: le faire marcher, étape 2: s'ammuser
+TODO: nom de fichiers avec argv/argc
+TODO: check si les positions des jetons evolution sont valides
+*/
+
+int main(int argc, char *argv[]) {  // Point d'entré du programme
 
     T_joueur joueur1 = {1, PSEUDO_PAR_DEFAUT_J1};  //   / Création des joueurs et initialisation aux valeurs par défaut
     T_joueur joueur2 = {2, PSEUDO_PAR_DEFAUT_J2};  //  |
@@ -25,53 +33,43 @@ int main() {  // Point d'entré du programme
     T_Position p = getPositionInitiale();  // On récupére la position initiale du plateau
     T_ListeCoups l = getCoupsLegaux(p);
     T_Score s = {0, 0, 0, 0};  // Par défaut, les scores sont de 0 pour chaque joueurs
-
-
-    // TODO: retirer après les tests
-    T_Coup coup_auto = l.coups[0];
-
-
-    int joue = 1;  // booléen pour savoir si on joue ou non
-
-    printf("----- A V A L A M   P A R   L A   T E A M   A V A L P I E R R E -----\n\n");
-
-
-    printf("Nom Joueur 1: %s   -   Trait: %s\n", joueur1.pseudo, COLNAME(joueur1.trait));
-    printf("Nom Joueur 2: %s   -   Trait: %s\n", joueur2.pseudo, COLNAME(joueur2.trait));
-
-
-	printf("Depuis la position initiale du jeu, il y a %d coups possibles\n", l.nb);
-	printf("Depuis la position initiale du jeu, le trait est aux %ss\n", COLNAME(p.trait));
-    printf("Score actuel: ");
-    afficherScore(s);
-
-    if (ecrireJSON(p)==0) {
-        printf("erreur d'écriture du fichier json");
-        return -1;
-    }
     
-    while (joue)
+
+    if (argc == 1) printf("Utilisation du fichier %s\n", CHEMIN_PAR_DEFAUT);
+    else printf("Utilisation du fichier %s\n", argv[1]);
+    printf("Continuer ?");
+    getchar();  // on attend que l'utilisateur appuie sur entré
+
+    // bonus/malus:
+    printf("\tbonusJ ? : ");
+    scanf("%hhd", &(p.evolution.bonusJ));  // hhd plutot que d car on veut des octets
+    printf("\tbonusR ? : ");
+    scanf("%hhd", &(p.evolution.bonusR));
+    printf("\tmalusJ ? : ");
+    scanf("%hhd", &(p.evolution.malusJ));
+    printf("\tmalusR ? : ");
+    scanf("%hhd", &(p.evolution.malusR));
+
+    // on initialise le fichier json avant de commencer la partie 
+    if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  
+    else ecrireJSON(p, argv[1]);
+
+    while (l.nb) // tant qu'il y a des coups légaux: on joue
     {
-        // MODE MANUEL
         system("clear");
         s = evaluerScore(p);
         afficherScore(s);
-        
         printf("Trait aux %ss :\n", COLNAME(p.trait));
-
-        // printf("Position actuelle:\n");
-        // afficherPosition(p);  // affichage de l'état actuel du plateau
-        coupV3(&p);  // Saisie du coup pour l'utilisateur
-        ecrireJSON(p);
-
-        
-        l = getCoupsLegaux(p);
-        if (l.nb == 0) {
-            // Plus de coups légaux à jouer -> fin de la partie
-            joue = 0;
+        while (coupV3(&p)) {
+            system("clear");
+            s = evaluerScore(p);
+            afficherScore(s);
+            printf("Trait aux %ss :\n", COLNAME(p.trait));
         }
+        if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  
+        else ecrireJSON(p, argv[1]);
+        l = getCoupsLegaux(p);
     }
-    printf("\n\n----- F I N   D E   L A   P A R T I E -----\n\n");
     printf("Score final: ") ;
     afficherScore(s);
     if (s.nbJ > s.nbR) printf("%s a gagné !\n", joueur1.pseudo);
@@ -85,48 +83,25 @@ int main() {  // Point d'entré du programme
 }
 
 
-void coupV3(T_Position *p) {
+int coupV3(T_Position *p) {
     int depart, fin;
     printf("\tcaseO ? : ");
     scanf("%d", &depart);
     printf("\tcaseD ? : ");
     scanf("%d", &fin);  
     if (estValide(*p, depart, fin)) *p = jouerCoup(*p, depart, fin);
-    else coupV3(p);
+    else return 1;
+    return 0;
 }
 
 
 
-void coupV2(T_Position *p) {
-    int depart, fin;
-    printf("Quel pile souhaitez vous utiliser ? [-1 pour afficher tous les coups légaux possibles] ");
-    scanf("%d", &depart);
-    if (depart == -1) {
-        printf("Coups légaux:\n");
-        afficherListeCoups(getCoupsLegaux(*p));
-        printf("Quel pile souhaitez vous utiliser ? ");
-        scanf("%d", &depart);
-        printf("Voisins de la case '%d': ", depart);
-        listerVoisins(depart);
-    } else {
-        printf("Voisins de la case '%d': ", depart);
-        listerVoisins(depart);
-    }
-    
-    printf("Où souhaitez vous la poser ? ");
-    scanf("%d", &fin);  
-    if (estValide(*p, depart, fin)) *p = jouerCoup(*p, depart, fin);
-    else coupV2(p);
-}
-
-
-
-int ecrireJSON(T_Position p) {
+int ecrireJSON(T_Position p, char *chemin) {
     FILE *fichier;
     T_Score s = evaluerScore(p);
     int i;
 
-    fichier = fopen("position.js", "w");
+    fichier = fopen(chemin, "w");
     if (fichier==NULL) return 0;
     // ecrire le json ici
     fprintf(fichier, "traiterJson({\n"); //  
@@ -172,5 +147,29 @@ int coup(T_Position *p){
         return 1;
     }
     else return coup(p);
+}
+*/
+
+/*
+void coupV2(T_Position *p) {
+    int depart, fin;
+    printf("Quel pile souhaitez vous utiliser ? [-1 pour afficher tous les coups légaux possibles] ");
+    scanf("%d", &depart);
+    if (depart == -1) {
+        printf("Coups légaux:\n");
+        afficherListeCoups(getCoupsLegaux(*p));
+        printf("Quel pile souhaitez vous utiliser ? ");
+        scanf("%d", &depart);
+        printf("Voisins de la case '%d': ", depart);
+        listerVoisins(depart);
+    } else {
+        printf("Voisins de la case '%d': ", depart);
+        listerVoisins(depart);
+    }
+    
+    printf("Où souhaitez vous la poser ? ");
+    scanf("%d", &fin);  
+    if (estValide(*p, depart, fin)) *p = jouerCoup(*p, depart, fin);
+    else coupV2(p);
 }
 */
