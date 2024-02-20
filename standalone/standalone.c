@@ -12,9 +12,10 @@ typedef struct  //definie la structure d'un joueur
     char pseudo[20];  //pseudo de 20 caractères max
 } T_joueur;
 
-int coup(T_Position *p);
+//int coup(T_Position *p);
 void coupV2(T_Position *p);
-
+void coupV3(T_Position *p);
+int ecrireJSON(T_Position p);
 
 int main() {  // Point d'entré du programme
 
@@ -43,29 +44,27 @@ int main() {  // Point d'entré du programme
 	printf("Depuis la position initiale du jeu, le trait est aux %ss\n", COLNAME(p.trait));
     printf("Score actuel: ");
     afficherScore(s);
-    // printf("\nListe des coups possibles:\n");
-    // afficherListeCoups(l);
-    // coup(&p);
+
+    if (ecrireJSON(p)==0) {
+        printf("erreur d'écriture du fichier json");
+        return -1;
+    }
     
     while (joue)
     {
-        /*
-        // -------------------------- //
         // MODE MANUEL
-        printf("Position actuelle:\n");
-        afficherPosition(p);  // affichage de l'état actuel du plateau
-        coupV2(&p);  // Saisie du coup pour l'utilisateur
-        // -------------------------- //
-        */
-        // -------------------------- //
-        // MODE AUTOMATIQUE (on joue le premier coup légal automatiquement) aka STUPIDO_BOT
-        printf("Coups légaux: %d\n", l.nb);
-        coup_auto = l.coups[0];
-        p = jouerCoup(p, coup_auto.origine, coup_auto.destination);
-        // -------------------------- //
+        system("clear");
         s = evaluerScore(p);
-        printf("Score actuel: ");
         afficherScore(s);
+        
+        printf("Trait aux %ss :\n", COLNAME(p.trait));
+
+        // printf("Position actuelle:\n");
+        // afficherPosition(p);  // affichage de l'état actuel du plateau
+        coupV3(&p);  // Saisie du coup pour l'utilisateur
+        ecrireJSON(p);
+
+        
         l = getCoupsLegaux(p);
         if (l.nb == 0) {
             // Plus de coups légaux à jouer -> fin de la partie
@@ -86,6 +85,18 @@ int main() {  // Point d'entré du programme
 }
 
 
+void coupV3(T_Position *p) {
+    int depart, fin;
+    printf("\tcaseO ? : ");
+    scanf("%d", &depart);
+    printf("\tcaseD ? : ");
+    scanf("%d", &fin);  
+    if (estValide(*p, depart, fin)) *p = jouerCoup(*p, depart, fin);
+    else coupV3(p);
+}
+
+
+
 void coupV2(T_Position *p) {
     int depart, fin;
     printf("Quel pile souhaitez vous utiliser ? [-1 pour afficher tous les coups légaux possibles] ");
@@ -95,6 +106,8 @@ void coupV2(T_Position *p) {
         afficherListeCoups(getCoupsLegaux(*p));
         printf("Quel pile souhaitez vous utiliser ? ");
         scanf("%d", &depart);
+        printf("Voisins de la case '%d': ", depart);
+        listerVoisins(depart);
     } else {
         printf("Voisins de la case '%d': ", depart);
         listerVoisins(depart);
@@ -107,6 +120,46 @@ void coupV2(T_Position *p) {
 }
 
 
+
+int ecrireJSON(T_Position p) {
+    FILE *fichier;
+    T_Score s = evaluerScore(p);
+    int i;
+
+    fichier = fopen("position.js", "w");
+    if (fichier==NULL) return 0;
+    // ecrire le json ici
+    fprintf(fichier, "traiterJson({\n"); //  
+    fprintf(fichier, "\t\"trait\":%d,\n", p.trait); // 
+
+    fprintf(fichier, "\t\"scoreJ\":%d,\n", s.nbJ);  // Ecrit le score des jaunes
+    fprintf(fichier, "\t\"scoreJ5\":%d,\n", s.nbJ5);  // Ecrit le nombre de colonnes 5 pieces des jaunes
+    fprintf(fichier, "\t\"scoreR\":%d,\n", s.nbR);  // Eccrit le score des rouges
+    fprintf(fichier, "\t\"scoreR5\":%d,\n", s.nbR5);  // Ecrit le nom de colonnes 5 pièces des rouges
+
+    fprintf(fichier, "\t\"bonusJ\":%d,\n", p.evolution.bonusJ); // Ecrit la position du jeton evol Jaunes
+    fprintf(fichier, "\t\"malusJ\":%d,\n", p.evolution.malusJ); //
+    fprintf(fichier, "\t\"bonusR\":%d,\n", p.evolution.bonusR);
+    fprintf(fichier, "\t\"malusR\":%d,\n", p.evolution.malusR);
+
+    fprintf(fichier, "\t\"cols\":[\n");
+    for (i = 0; i < NBCASES; i++)
+    {
+        fprintf(fichier, "\t\t{\"nb\":%d, \"couleur\":%d}", p.cols[i].nb, p.cols[i].couleur);
+        if (i < NBCASES-1) fprintf(fichier, ",\n");
+    }
+    fprintf(fichier, "\n\t]\n");
+    
+    
+    fprintf(fichier, "});");
+    
+    // fermer le fichier
+    fclose(fichier);
+    return 1;
+}
+
+// première version de la fonction pour jouer un coup (marche pas)
+/*
 int coup(T_Position *p){
     T_ListeCoups listecoup = getCoupsLegaux(*p);
     int depart, fin;
@@ -120,3 +173,4 @@ int coup(T_Position *p){
     }
     else return coup(p);
 }
+*/
