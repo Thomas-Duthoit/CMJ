@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "topologie.h": "c"
+        "topologie.h": "c",
+        "avalam.h": "c"
     }
 }
