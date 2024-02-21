@@ -11,7 +11,8 @@ int main(int argc, char* argv[])
 {
     T_Position p;
     T_Score s;
-    char chemin[100];
+    int i = 0;
+    char chemin[1000];
     if(argc != 3)
     {
         printf("diag <numDiag> <fen>\n");
@@ -20,7 +21,8 @@ int main(int argc, char* argv[])
     printf("Diagramme %s\n", argv[1]);
     printf("Fen : %s\n", argv[2]);
     printf("Fichier (sera créé dans le répertoire ./web/data s'il existe) ? [diag.js] ");
-    scanf("%s", chemin);
+    fgets(chemin, 1000, stdin);
+    format(chemin);
     return 0;
 }
 
@@ -61,5 +63,11 @@ int ecrireJSON(T_Position p, char *chemin) {
     return 1;
 }
 
+void format(char ch[])
+{
+    int i = 0;
+    while(ch[i] != '\0') i++;
+    ch[i-1] = '\0';
+}
 
 // thomas was here :)
