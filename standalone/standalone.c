@@ -119,7 +119,6 @@ int coupV3(T_Position *p) {
 }
 
 
-
 int ecrireJSON(T_Position p, char *chemin) {
     FILE *fichier;
     T_Score s = evaluerScore(p);
@@ -128,22 +127,22 @@ int ecrireJSON(T_Position p, char *chemin) {
     fichier = fopen(chemin, "w");
     if (fichier==NULL) return 0;
     fprintf(fichier, "traiterJson({\n");  // Initialisation du fichier JSON
-    fprintf(fichier, "\t\"trait\":%d,\n", p.trait); // Trait (Savoir qui joue)
+    fprintf(fichier, "\t"STR_TURN":%d,\n", p.trait); // Trait (Savoir qui joue)
 
-    fprintf(fichier, "\t\"scoreJ\":%d,\n", s.nbJ);  // Ecrit le score des jaunes
-    fprintf(fichier, "\t\"scoreJ5\":%d,\n", s.nbJ5);  // Ecrit le nombre de colonnes 5 pieces des jaunes
-    fprintf(fichier, "\t\"scoreR\":%d,\n", s.nbR);  // Eccrit le score des rouges
-    fprintf(fichier, "\t\"scoreR5\":%d,\n", s.nbR5);  // Ecrit le nom de colonnes 5 pièces des rouges
+    fprintf(fichier, "\t"STR_SCORE_J":%d,\n", s.nbJ);  // Ecrit le score des jaunes
+    fprintf(fichier, "\t"STR_SCORE_J5":%d,\n", s.nbJ5);  // Ecrit le nombre de colonnes 5 pieces des jaunes
+    fprintf(fichier, "\t"STR_SCORE_R":%d,\n", s.nbR);  // Eccrit le score des rouges
+    fprintf(fichier, "\t"STR_SCORE_R5":%d,\n", s.nbR5);  // Ecrit le nom de colonnes 5 pièces des rouges
 
-    fprintf(fichier, "\t\"bonusJ\":%d,\n", p.evolution.bonusJ);  // Ecrit la position du jeton evol Jaunes
-    fprintf(fichier, "\t\"malusJ\":%d,\n", p.evolution.malusJ);  // Ecrit la position du jeton malus Jaunes
-    fprintf(fichier, "\t\"bonusR\":%d,\n", p.evolution.bonusR);  // Ecrit la position du jeton evol Rouges
-    fprintf(fichier, "\t\"malusR\":%d,\n", p.evolution.malusR);  // Ecrit la position du jeton malus Rouges
+    fprintf(fichier, "\t"STR_BONUS_J":%d,\n", p.evolution.bonusJ);  // Ecrit la position du jeton evol Jaunes
+    fprintf(fichier, "\t"STR_MALUS_J":%d,\n", p.evolution.malusJ);  // Ecrit la position du jeton malus Jaunes
+    fprintf(fichier, "\t"STR_BONUS_R":%d,\n", p.evolution.bonusR);  // Ecrit la position du jeton evol Rouges
+    fprintf(fichier, "\t"STR_MALUS_R":%d,\n", p.evolution.malusR);  // Ecrit la position du jeton malus Rouges
 
-    fprintf(fichier, "\t\"cols\":[\n");
+    fprintf(fichier, "\t"STR_COLS":[\n");
     for (i = 0; i < NBCASES; i++)
     {
-        fprintf(fichier, "\t\t{\"nb\":%d, \"couleur\":%d}", p.cols[i].nb, p.cols[i].couleur);
+        fprintf(fichier, "\t\t{"STR_NB":%d, "STR_COULEUR":%d}", p.cols[i].nb, p.cols[i].couleur);
         if (i < NBCASES-1) fprintf(fichier, ",\n");
     }
     fprintf(fichier, "\n\t]\n");
