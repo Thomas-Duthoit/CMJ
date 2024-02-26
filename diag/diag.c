@@ -6,6 +6,8 @@
 #define CHEMIN_PAR_DEFAUT "./web/data/diag.js"
 #define BREAK "<br />"
 
+#define MAX_K 1000
+
 typedef struct
 {
     int trait;
@@ -23,9 +25,9 @@ int main(int argc, char* argv[])
     T_Position p;
     T_Diag d;
     int i = 0;
-    char chemin[1000]= "";
-    char description[1000] = "";
-    char temp[1000] = "";
+    char chemin[MAX_K]= "";
+    char description[MAX_K] = "";
+    char temp[MAX_K] = "";
 
     if(argc != 3)
     {
@@ -36,16 +38,14 @@ int main(int argc, char* argv[])
     d.num_diag = atoi(argv[1]);
     d.fen = argv[2];
 
-    /*TODO: POSSIBILITE FAIRE DES NOTES*/
-
     printf("Diagramme %d\n", d.num_diag);
     printf("Fen : %s\n", d.fen);
     printf("Fichier (sera créé dans le répertoire ./web/data s'il existe) ? [diag.js] ");
-    fgets(chemin, 1000, stdin);
+    fgets(chemin, MAX_K, stdin);
     format(chemin);
 
     printf("Description (vous pouvez saisir du HTML, Ctrl+D pour terminer) ? []\n");
-    while(fgets(temp, 1000, stdin) != NULL)
+    while(fgets(temp, MAX_K, stdin) != NULL)
     {
         format(temp);
         if(description[0] != '\0')

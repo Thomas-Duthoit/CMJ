@@ -1,14 +1,60 @@
 traiterJson({
-	"trait":
-	"numDiag":3,
-	"notes":test1<br />test,
-	"fen":td r,
-	"scoreJ":
-	"scoreJ5":
-	"scoreR":
-	"scoreR5":
-	"bonusJ":
-	"malusJ":
-	"bonusR":
-	"malusR":
+"trait":1,
+"numDiag":3,
+"notes":"",
+"fen":"dt rj",
+"bonusJ":255,
+"malusJ":255,
+"bonusR":255,
+"malusR":255,
+"cols":[
+	{"nb":2, "couleur":1},
+	{"nb":3, "couleur":1},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0},
+	{"nb":0, "couleur":0}
+]
 });
