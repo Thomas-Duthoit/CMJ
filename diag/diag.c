@@ -4,6 +4,7 @@
 #include <topologie.h>
 
 #define CHEMIN_PAR_DEFAUT "./web/data/diag.js"
+#define BREAK "<br />"
 
 typedef struct
 {
@@ -15,13 +16,16 @@ typedef struct
 
 int ecrireJSON(T_Position p, char *chemin, T_Diag d);
 void format(char* ch);
+void concat(char dest[], char src[]);
 
 int main(int argc, char* argv[]) 
 {
     T_Position p;
     T_Diag d;
     int i = 0;
-    char chemin[1000];
+    char chemin[1000]= "";
+    char description[1000] = "";
+    char temp[1000] = "";
 
     if(argc != 3)
     {
@@ -39,6 +43,19 @@ int main(int argc, char* argv[])
     printf("Fichier (sera créé dans le répertoire ./web/data s'il existe) ? [diag.js] ");
     fgets(chemin, 1000, stdin);
     format(chemin);
+
+    printf("Description (vous pouvez saisir du HTML, Ctrl+D pour terminer) ? []\n");
+    while(fgets(temp, 1000, stdin) != NULL)
+    {
+        format(temp);
+        if(description[0] != '\0')
+            concat(description, BREAK);
+        concat(description, temp);
+    }
+    d.notes = description;
+    printf("Description : %s", d.notes);
+
+
     if(chemin[0] == '\0')
         ecrireJSON(p, CHEMIN_PAR_DEFAUT, d);
     else
@@ -52,13 +69,13 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){
     fichier = fopen(chemin, "w+");
     if (fichier==NULL) 
         return 0;
-
+    printf("\nEnregistrement de %s\n", chemin);
     /*TODO: INTERPREATION CHAINE FEN*/
 
     fprintf(fichier, "traiterJson({\n");  // Initialisation du fichier JSON
     fprintf(fichier, "\t"STR_TURN":\n"); // Ecrit le trait (Savoir qui joue)
     fprintf(fichier, "\t"STR_NUMDIAG":%d,\n", d.num_diag);  // Ecrit le numéro de diagramme
-    fprintf(fichier, "\t"STR_NOTES":\n");
+    fprintf(fichier, "\t"STR_NOTES":%s,\n", d.notes);
     fprintf(fichier, "\t"STR_FEN":%s,\n", d.fen); // Ecrit la chaine fen
 
 
@@ -84,6 +101,19 @@ void format(char ch[])  // Permet de retirer "\n" crée à cause du fgets.
     int i = 0;
     while(ch[i] != '\0') i++;
     ch[i-1] = '\0';
+}
+
+void concat(char dest[], char src[])
+{
+    int i = 0, j = 0;
+    while(dest[i] != '\0') i++;
+    while(src[j] != '\0')
+    {
+        dest[i] = src[j];
+        i++;
+        j++;
+    }
+    dest[i] = '\0';
 }
 
 // thomas was here :)
