@@ -41,28 +41,28 @@ int main(int argc, char *argv[]) {  // Point d'entré du programme
     getchar();  // on attend que l'utilisateur appuie sur entré
 
     // bonus/malus:
-    p.evolution.bonusJ = 255;
+    p.evolution.bonusJ = UNKNOWN;
     printf("%d\n", p.evolution.bonusJ%2);
     while (0 > p.evolution.bonusJ && p.evolution.bonusJ > NBCASES && (p.evolution.bonusJ)%2 == 1)
     {
         printf("\tbonusJ ? : ");
         scanf("%hhd", &(p.evolution.bonusJ));  // hhd plutot que d car on veut des octets
     }
-    p.evolution.bonusR = 255;
+    p.evolution.bonusR = UNKNOWN;
     printf("%d\n", p.evolution.bonusR%2);
     while (0 > p.evolution.bonusR && p.evolution.bonusR > NBCASES && (p.evolution.bonusR)%2)
     {
         printf("\tbonusR ? : ");
         scanf("%hhd", &(p.evolution.bonusR));
     }
-    p.evolution.malusJ = 255;
+    p.evolution.malusJ = UNKNOWN;
     printf("%d\n", p.evolution.malusJ%2);
     while (0 > p.evolution.malusJ && p.evolution.malusJ > NBCASES && !(p.evolution.malusJ)%2 && p.evolution.malusJ != p.evolution.bonusJ)
     {
         printf("\tmalusJ ? : ");
         scanf("%hhd", &(p.evolution.malusJ));
     }
-    p.evolution.malusR = 255;
+    p.evolution.malusR = UNKNOWN;
     printf("%d\n", p.evolution.malusR%2);
     while (0 > p.evolution.malusR && p.evolution.malusR > NBCASES && (p.evolution.malusR)%2 && p.evolution.malusR != p.evolution.bonusR)
     {
@@ -139,7 +139,7 @@ int ecrireJSON(T_Position p, char *chemin) {
     fprintf(fichier, "\t"STR_BONUS_R":%d,\n", p.evolution.bonusR);  // Ecrit la position du jeton evol Rouges
     fprintf(fichier, "\t"STR_MALUS_R":%d,\n", p.evolution.malusR);  // Ecrit la position du jeton malus Rouges
 
-    fprintf(fichier, "\t"STR_COLS":[\n");
+    fprintf(fichier, "\t"STR_COLS":[\n");  // Ecrit l'état des colonnes
     for (i = 0; i < NBCASES; i++)
     {
         fprintf(fichier, "\t\t{"STR_NB":%d, "STR_COULEUR":%d}", p.cols[i].nb, p.cols[i].couleur);
