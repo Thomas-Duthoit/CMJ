@@ -173,6 +173,7 @@ int main(int argc, char* argv[])
                     i++;
                 }
                 num[j] = '\0';
+                j = 0;
                 case_prise = case_prise + atoi(num);
                 i--;
             }
