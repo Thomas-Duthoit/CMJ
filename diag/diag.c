@@ -229,7 +229,6 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){
     // fermer le fichier
     fclose(fichier);
     CHECK_DIF(fichier, NULL, chemin);
-    return 1;
 }
 
 
