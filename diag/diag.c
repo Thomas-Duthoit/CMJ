@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     fgets(chemin, MAX_K, stdin); // Demande du chemin
     format(chemin);
 
-    printf("Description (vous pouvez saisir du HTML, Ctrl+D pour terminer) ? []\n");
+    printf("Description (vous pouvez saisir du HTML, 1000 caractères max, Ctrl+D pour terminer) ? []\n");
     while(fgets(temp, MAX_K, stdin) != NULL)  // Description
     {
         format(temp);
@@ -192,11 +192,10 @@ int main(int argc, char* argv[])
 
 int ecrireJSON(T_Position p, char *chemin, T_Diag d){
     FILE *fichier;
-    T_Score s;
+    T_Score s = evaluerScore(p);
     int i;
     fichier = fopen(chemin, "w+");
-    if (fichier==NULL) 
-        return 0;
+    if (fichier==NULL) return 0;
     printf("\nEnregistrement de %s\n", chemin);
 
     fprintf(fichier, "traiterJson({\n");  // Initialisation du fichier JSON
