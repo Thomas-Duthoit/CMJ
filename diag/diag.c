@@ -195,7 +195,8 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){
     T_Score s = evaluerScore(p);
     int i;
     fichier = fopen(chemin, "w+");
-    if (fichier==NULL) return 0;
+    if (fichier==NULL)
+        CHECK_IF(fichier, NULL, chemin);
     printf("\nEnregistrement de %s\n", chemin);
 
     fprintf(fichier, "traiterJson({\n");  // Initialisation du fichier JSON
@@ -227,6 +228,7 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){
 
     // fermer le fichier
     fclose(fichier);
+    CHECK_DIF(fichier, NULL, chemin);
     return 1;
 }
 
@@ -235,7 +237,7 @@ void format(char ch[])  // Permet de retirer "\n" crée à cause du fgets.
 {
     int i = 0;
     while(ch[i] != '\0') i++;
-    ch[i-1] = '\0';
+    if(ch[i-1] == '\n') ch[i-1] = '\0';
 }
 
 
