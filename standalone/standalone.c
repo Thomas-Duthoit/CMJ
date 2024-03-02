@@ -19,12 +19,6 @@ typedef struct  //definie la structure d'un joueur
 int coupV3(T_Position *p);
 int ecrireJSON(T_Position p, char *chemin);
 
-/*
-TODO: finir le jeu: étape 1: le faire marcher, étape 2: s'ammuser
-TODO: nom de fichiers avec argv/argc
-TODO: check si les positions des jetons evolution sont valides
-*/
-
 int main(int argc, char *argv[]) {  // Point d'entré du programme
 
     T_joueur joueur1 = {1, PSEUDO_PAR_DEFAUT_J1};  //   / Création des joueurs et initialisation aux valeurs par défaut
@@ -40,39 +34,32 @@ int main(int argc, char *argv[]) {  // Point d'entré du programme
     printf("Continuer ?");
     getchar();  // on attend que l'utilisateur appuie sur entré
 
-    // bonus/malus:
+    // bonus/malus evolution:
     p.evolution.bonusJ = UNKNOWN;
-    printf("%d\n", p.evolution.bonusJ%2);
-    while (0 > p.evolution.bonusJ && p.evolution.bonusJ > NBCASES && (p.evolution.bonusJ)%2 == 1)
+    p.evolution.bonusR = UNKNOWN;    
+    p.evolution.malusJ = UNKNOWN;
+    p.evolution.malusR = UNKNOWN;
+
+    while (((0 <= p.evolution.bonusJ || p.evolution.bonusJ > NBCASES) && (p.evolution.bonusJ)%2 == 0) || p.evolution.bonusJ == UNKNOWN)
     {
         printf("\tbonusJ ? : ");
         scanf("%hhd", &(p.evolution.bonusJ));  // hhd plutot que d car on veut des octets
     }
-    p.evolution.bonusR = UNKNOWN;
-    printf("%d\n", p.evolution.bonusR%2);
-    while (0 > p.evolution.bonusR && p.evolution.bonusR > NBCASES && (p.evolution.bonusR)%2)
+    while (((0 <= p.evolution.bonusR || p.evolution.bonusR > NBCASES) && (p.evolution.bonusR)%2) || p.evolution.bonusR == UNKNOWN)
     {
         printf("\tbonusR ? : ");
         scanf("%hhd", &(p.evolution.bonusR));
     }
-    p.evolution.malusJ = UNKNOWN;
-    printf("%d\n", p.evolution.malusJ%2);
-    while (0 > p.evolution.malusJ && p.evolution.malusJ > NBCASES && !(p.evolution.malusJ)%2 && p.evolution.malusJ != p.evolution.bonusJ)
+    while (((0 <= p.evolution.malusJ || p.evolution.malusJ > NBCASES) && (p.evolution.malusJ)%2 == 0) || p.evolution.malusJ == p.evolution.bonusJ || p.evolution.malusJ == UNKNOWN)
     {
         printf("\tmalusJ ? : ");
         scanf("%hhd", &(p.evolution.malusJ));
     }
-    p.evolution.malusR = UNKNOWN;
-    printf("%d\n", p.evolution.malusR%2);
-    while (0 > p.evolution.malusR && p.evolution.malusR > NBCASES && (p.evolution.malusR)%2 && p.evolution.malusR != p.evolution.bonusR)
+    while (((0 <= p.evolution.malusR || p.evolution.malusR > NBCASES) && (p.evolution.malusR)%2) || p.evolution.malusR == p.evolution.bonusR || p.evolution.malusR == UNKNOWN)
     {
         printf("\tmalusR ? : ");
         scanf("%hhd", &(p.evolution.malusR));
     }
-    
-    
-    getchar();
-    
 
     // on initialise le fichier json avant de commencer la partie 
     if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  
