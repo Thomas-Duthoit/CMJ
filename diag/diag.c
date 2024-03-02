@@ -195,8 +195,7 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){
     T_Score s = evaluerScore(p);
     int i;
     fichier = fopen(chemin, "w+");
-    if (fichier==NULL)
-        CHECK_IF(fichier, NULL, chemin);
+    CHECK_IF(fichier, NULL, chemin);
     printf("\nEnregistrement de %s\n", chemin);
 
     fprintf(fichier, "traiterJson({\n");  // Initialisation du fichier JSON
