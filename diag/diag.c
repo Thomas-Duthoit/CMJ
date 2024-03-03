@@ -25,30 +25,30 @@ int main(int argc, char* argv[])
     T_Position p;
     T_Diag d;
     int i = 0, j = 0;
-    int case_prise = 0;  // Sert à savoir où se trouve la dernière case "occupée"
+    int case_prise = 0;  // Var use to know where is the first case we can take
     char chemin[MAX_K]= "";
     char description[MAX_K] = "";
     char temp[MAX_K] = "";
     char num[MAX_K] = "";
 
-    if(argc != 3)  // Nombre d'argument insuffisant
+    if(argc != 3)  // If arg's number are Insufficient
     {
         printf("diag <numDiag> <fen>\n");
         return -1;
     }
 
-    d.num_diag = atoi(argv[1]);  // Numéro de diagramme
-    d.fen = argv[2];  // Chaine FEN
+    d.num_diag = atoi(argv[1]);  // Diag number
+    d.fen = argv[2];  // FEN String
 
     printf("Diagramme %d\n", d.num_diag);
     printf("Fen : %s\n", d.fen);
 
     printf("Fichier (sera créé dans le répertoire ./web/data s'il existe) ? [diag.js] ");
-    fgets(chemin, MAX_K, stdin); // Demande du chemin
+    fgets(chemin, MAX_K, stdin); // Path's input
     format(chemin);
 
     printf("Description (vous pouvez saisir du HTML, 1000 caractères max, Ctrl+D pour terminer) ? []\n");
-    while(fgets(temp, MAX_K, stdin) != NULL)  // Description
+    while(fgets(temp, MAX_K, stdin) != NULL)  // Description's input
     {
         format(temp);
         if(description[0] != '\0')
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     d.notes = description;
     printf("Description : %s", d.notes);
 
-//  Initialise le tout avant l'interprétation de la chaine FEN
+//  Initializing before FEN interpretation
     p.trait = 0;
     p.evolution.bonusJ = UNKNOWN;
     p.evolution.bonusR = UNKNOWN;
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
     }
     i = 0;
 
-    while(d.fen[i] != '\0' && case_prise < NBCASES)
+    while(d.fen[i] != '\0' && case_prise < NBCASES) // All possibles cases for the FEN interpretation
     {
         switch(d.fen[i])
         {
@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
         i++;
     }
     
-    if(chemin[0] == '\0')  // Ecriture au chemin par défaut ou défini par l'utilisateur
+    if(chemin[0] == '\0')  // Creating and writing the file depending of the user's input.
         ecrireJSON(p, CHEMIN_PAR_DEFAUT, d);
     else
         ecrireJSON(p, chemin, d);
@@ -190,7 +190,7 @@ int main(int argc, char* argv[])
 }
 
 
-int ecrireJSON(T_Position p, char *chemin, T_Diag d){
+int ecrireJSON(T_Position p, char *chemin, T_Diag d){  // Write the JSON file
     FILE *fichier;
     T_Score s = evaluerScore(p);
     int i;
@@ -198,24 +198,24 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){
     CHECK_IF(fichier, NULL, chemin);
     printf("\nEnregistrement de %s\n", chemin);
 
-    fprintf(fichier, "traiterJson({\n");  // Initialisation du fichier JSON
-    fprintf(fichier, "\t"STR_TURN":%d,\n", p.trait); // Ecrit le trait (Savoir qui joue)
-    fprintf(fichier, "\t"STR_NUMDIAG":%d,\n", d.num_diag);  // Ecrit le numéro de diagramme
-    fprintf(fichier, "\t"STR_NOTES":\"%s\",\n", d.notes);  // Ecrit les notes
-    fprintf(fichier, "\t"STR_FEN":\"%s\",\n", d.fen); // Ecrit la chaine fen
+    fprintf(fichier, "traiterJson({\n");  // Initializes JSON file
+    fprintf(fichier, "\t"STR_TURN":%d,\n", p.trait); // Write the "trait"
+    fprintf(fichier, "\t"STR_NUMDIAG":%d,\n", d.num_diag);  // Write diag's number
+    fprintf(fichier, "\t"STR_NOTES":\"%s\",\n", d.notes);  // Write notes
+    fprintf(fichier, "\t"STR_FEN":\"%s\",\n", d.fen); // Write the FEN string
 
 
-    fprintf(fichier, "\t"STR_SCORE_J":%d,\n", s.nbJ);  // Ecrit le score des jaunes
-    fprintf(fichier, "\t"STR_SCORE_J5":%d,\n", s.nbJ5);  // Ecrit le nombre de colonnes 5 pieces des jaunes
-    fprintf(fichier, "\t"STR_SCORE_R":%d,\n", s.nbR);  // Eccrit le score des rouges
-    fprintf(fichier, "\t"STR_SCORE_R5":%d,\n", s.nbR5);  // Ecrit le nom de colonnes 5 pièces des rouges
+    fprintf(fichier, "\t"STR_SCORE_J":%d,\n", s.nbJ);  // Write yellow's score
+    fprintf(fichier, "\t"STR_SCORE_J5":%d,\n", s.nbJ5);  // Write yellow's 5 column
+    fprintf(fichier, "\t"STR_SCORE_R":%d,\n", s.nbR);  // Write red's score
+    fprintf(fichier, "\t"STR_SCORE_R5":%d,\n", s.nbR5);  // Write red's 5 columns
 
-    fprintf(fichier, "\t"STR_BONUS_J":%d,\n", p.evolution.bonusJ);  // Ecrit la position du jeton evol Jaunes
-    fprintf(fichier, "\t"STR_MALUS_J":%d,\n", p.evolution.malusJ);  // Ecrit la position du jeton malus Jaunes
-    fprintf(fichier, "\t"STR_BONUS_R":%d,\n", p.evolution.bonusR);  // Ecrit la position du jeton evol Rouges
-    fprintf(fichier, "\t"STR_MALUS_R":%d,\n", p.evolution.malusR);  // Ecrit la position du jeton malus Rouges
+    fprintf(fichier, "\t"STR_BONUS_J":%d,\n", p.evolution.bonusJ);  // Write the position of Yellow's bonus
+    fprintf(fichier, "\t"STR_MALUS_J":%d,\n", p.evolution.malusJ);  // Write the position of Yellow's malus
+    fprintf(fichier, "\t"STR_BONUS_R":%d,\n", p.evolution.bonusR);  // Write the position of Red's bonus
+    fprintf(fichier, "\t"STR_MALUS_R":%d,\n", p.evolution.malusR);  // Write the position of Red's malus
 
-    fprintf(fichier, "\t"STR_COLS":[\n");  // Ecrit l'état des colonnes
+    fprintf(fichier, "\t"STR_COLS":[\n");  // Write all column states
     for (i = 0; i < NBCASES; i++)
     {
         fprintf(fichier, "\t\t{"STR_NB":%d, "STR_COULEUR":%d}", p.cols[i].nb, p.cols[i].couleur);
@@ -225,13 +225,13 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){
 
     fprintf(fichier, "});");
 
-    // fermer le fichier
+    // Close file
     fclose(fichier);
     CHECK_DIF(fichier, NULL, chemin);
 }
 
 
-void format(char ch[])  // Permet de retirer "\n" crée à cause du fgets. 
+void format(char ch[])  // Remove '\n' due to fgets
 {
     int i = 0;
     while(ch[i] != '\0') i++;
@@ -239,7 +239,7 @@ void format(char ch[])  // Permet de retirer "\n" crée à cause du fgets.
 }
 
 
-void concat(char dest[], char src[])  // Permet de concaténer 2 chaines
+void concat(char dest[], char src[])  // Concatenate 2 strings (useful for notes)
 {
     int i = 0, j = 0;
     while(dest[i] != '\0') i++;
