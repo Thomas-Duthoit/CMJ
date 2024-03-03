@@ -114,6 +114,8 @@ int ecrireJSON(T_Position p, char *chemin) {
     int i;
 
     fichier = fopen(chemin, "w");
+    CHECK_IF(fichier, NULL, chemin);  // security check
+
     if (fichier==NULL) return 0;
     fprintf(fichier, "traiterJson({\n");  // Initialisation du fichier JSON
     fprintf(fichier, "\t"STR_TURN":%d,\n", p.trait); // Trait (Savoir qui joue)
@@ -141,6 +143,8 @@ int ecrireJSON(T_Position p, char *chemin) {
     
     // fermer le fichier
     fclose(fichier);
+    CHECK_DIF(fichier, NULL, chemin);  // security check
+
     return 1;
 }
 
