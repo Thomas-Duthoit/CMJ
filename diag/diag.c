@@ -10,10 +10,9 @@
 
 typedef struct
 {
-    int trait;
-    int num_diag;
-    char* notes;
-    char* fen;
+    int num_diag;  // Diag's number
+    char* notes;  // Diag's notes 
+    char* fen;  // Diag's FEN string.
 } T_Diag;
 
 int ecrireJSON(T_Position p, char *chemin, T_Diag d);
@@ -30,9 +29,10 @@ int main(int argc, char* argv[])
     char description[MAX_K] = "";
     char temp[MAX_K] = "";
     char num[MAX_K] = "";
-
+    
     if(argc != 3)  // If arg's number are Insufficient
     {
+        printf0("Le nombre d'argument est incorrect\n");
         printf("diag <numDiag> <fen>\n");
         return -1;
     }
@@ -43,11 +43,11 @@ int main(int argc, char* argv[])
     printf("Diagramme %d\n", d.num_diag);
     printf("Fen : %s\n", d.fen);
 
-    printf("Fichier (sera créé dans le répertoire ./web/data s'il existe) ? [diag.js] ");
+    printf("Fichier (sera créé sous la forme %s si possible) ?", CHEMIN_PAR_DEFAUT);
     fgets(chemin, MAX_K, stdin); // Path's input
     format(chemin);
 
-    printf("Description (vous pouvez saisir du HTML, 1000 caractères max, Ctrl+D pour terminer) ? []\n");
+    printf("Description (vous pouvez saisir du HTML, %d caractères max, Ctrl+D pour terminer) ? []\n", MAX_K);
     while(fgets(temp, MAX_K, stdin) != NULL)  // Description's input
     {
         format(temp);
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
         concat(description, temp);
     }
     d.notes = description;
-    printf("Description : %s", d.notes);
+    printf("\nDescription : \"%s\"\n", d.notes);
 
 //  Initializing before FEN interpretation
     p.trait = 0;
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
         p.cols[i].nb = 0;
     }
     i = 0;
-
+    printf0("Début de l'interprétation de la FEN\n");
     while(d.fen[i] != '\0' && case_prise < NBCASES) // All possibles cases for the FEN interpretation
     {
         switch(d.fen[i])
@@ -181,18 +181,41 @@ int main(int argc, char* argv[])
         }
         i++;
     }
-    
+
+    if(p.trait == 0)  // Only if trait is undefined due to while condition if it's over NB_CASES.
+    {
+        printf0("Trait non défini, recherche dans la FEN\n");
+        while(d.fen[i] != '\0')
+        {
+            if(d.fen[i] == 'j') 
+            {
+                p.trait = 1; 
+                printf0("Le trait est aux jaunes\n");
+            }
+            if(d.fen[i] == 'r') 
+            {
+                p.trait = 2; 
+                printf0("Le trait est aux rouges\n");
+            }
+            i++;
+        }
+    }
     if(chemin[0] == '\0')  // Creating and writing the file depending of the user's input.
+    {
+        printf0("Chemin non défini\n");
         ecrireJSON(p, CHEMIN_PAR_DEFAUT, d);
+    }
     else
+    {
+        printf0("Chemin défini");
         ecrireJSON(p, chemin, d);
+    }
     return 0;
 }
 
 
 int ecrireJSON(T_Position p, char *chemin, T_Diag d){  // Write the JSON file
     FILE *fichier;
-    T_Score s = evaluerScore(p);
     int i;
     fichier = fopen(chemin, "w+");
     CHECK_IF(fichier, NULL, chemin);
@@ -203,12 +226,6 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){  // Write the JSON file
     fprintf(fichier, "\t"STR_NUMDIAG":%d,\n", d.num_diag);  // Write diag's number
     fprintf(fichier, "\t"STR_NOTES":\"%s\",\n", d.notes);  // Write notes
     fprintf(fichier, "\t"STR_FEN":\"%s\",\n", d.fen); // Write the FEN string
-
-
-    fprintf(fichier, "\t"STR_SCORE_J":%d,\n", s.nbJ);  // Write yellow's score
-    fprintf(fichier, "\t"STR_SCORE_J5":%d,\n", s.nbJ5);  // Write yellow's 5 column
-    fprintf(fichier, "\t"STR_SCORE_R":%d,\n", s.nbR);  // Write red's score
-    fprintf(fichier, "\t"STR_SCORE_R5":%d,\n", s.nbR5);  // Write red's 5 columns
 
     fprintf(fichier, "\t"STR_BONUS_J":%d,\n", p.evolution.bonusJ);  // Write the position of Yellow's bonus
     fprintf(fichier, "\t"STR_MALUS_J":%d,\n", p.evolution.malusJ);  // Write the position of Yellow's malus
@@ -227,7 +244,7 @@ int ecrireJSON(T_Position p, char *chemin, T_Diag d){  // Write the JSON file
 
     // Close file
     fclose(fichier);
-    CHECK_DIF(fichier, NULL, chemin);
+    return 0;
 }
 
 

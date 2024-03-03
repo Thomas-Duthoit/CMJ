@@ -60,7 +60,7 @@ Compréhension de l'utilisation des fprintf.
 
 ### Diag (Ewen et Pierre):
 - Très léger polish.
-- Tests debug mode, échoué.
+- Tests debug mode.
 
 ## 3 mars (Ewen et Thomas) :
 ### Standalone (Thomas) :
@@ -78,5 +78,5 @@ Compréhension de l'utilisation des fprintf.
 # Travail effectué :
 - Ewen : Diag et de très très légères retouche sur standalone
 - Thomas : Standalone
-- Pierre : Tentative pour comprendre le debug. Travail minimaliste.
+- Pierre : Mode debug de standalone
 - Dorian : Travail quasi inexistant
