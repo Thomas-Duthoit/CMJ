@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {  // Point d'entré du programme
     while (((0 <= p.evolution.bonusJ || p.evolution.bonusJ > NBCASES) && (p.evolution.bonusJ)%2 == 0) || p.evolution.bonusJ == UNKNOWN)
     {
         printf("\tbonusJ ? : ");
-        scanf("%hhd", &(p.evolution.bonusJ));  // hhd plutot que d car on veut des octets
+        scanf("%hhd", &(p.evolution.bonusJ));  // hhd plutot que d car on veut des octets  (warning signalé par gcc)
     }
     while (((0 <= p.evolution.bonusR || p.evolution.bonusR > NBCASES) && (p.evolution.bonusR)%2) || p.evolution.bonusR == UNKNOWN)
     {
@@ -77,6 +77,7 @@ int main(int argc, char *argv[]) {  // Point d'entré du programme
             afficherScore(s);
             printf("Trait aux %ss :\n", COLNAME(p.trait));
         }
+        printf("nb coups possibles : %d", l.nb);
         if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  
         else ecrireJSON(p, argv[1]);
         l = getCoupsLegaux(p);
@@ -88,7 +89,7 @@ int main(int argc, char *argv[]) {  // Point d'entré du programme
     else if (s.nbJ == s.nbR) {
         if (s.nbJ5 > s.nbR5) printf(" %s gagnent\n", joueur1.pseudo);
         else if (s.nbJ5 < s.nbR5) printf(" %s gagnent\n", joueur2.pseudo);
-        else printf("Egalité\n");
+        else printf(" Egalité\n");
     }
     return 0;
 }
@@ -102,6 +103,7 @@ int coupV3(T_Position *p) {
     scanf("%d", &fin);  
     if (estValide(*p, depart, fin)) *p = jouerCoup(*p, depart, fin);
     else return 1;
+    printf("\tOn joue %d -> %d", depart, fin);
     return 0;
 }
 
