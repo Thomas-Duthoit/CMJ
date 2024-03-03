@@ -1,13 +1,14 @@
 # CMJ
 Challenge moteur de jeu
 
-Le programme standalone se trouve dans le répertoire standalone et permet de jouer à deux joueur au jeu Avalam en ligne de commandes.
+Le programme standalone se trouve dans le répertoire standalone et permet de jouer à deux joueur au jeu Avalam en ligne de commandes à l'aide d'avalam-refresh.html. Il est possible de paseer en paramètre un chemin pour la création du fichier JSON
 
-Le programme diag permet de faire des représentations du plateau grâce à une chaine FEN :
+Le programme diag permet de faire des représentations du plateau grâce à une chaine FEN avec avalam-diag.html :
 - u d t q c pour les jaunes
 - U D T Q C pour les rouges
 - b,m,B,M pour indiquer si la colonne précédente comporte un pion évolution (bonus ou malus) 
 - 1 … n pour indiquer un nombre de colonnes vides
+/!\ Il faut passer en paramètre un numéro de diagramme, puis une chaine FEN à interpréter
 
 Problèmes connues :
 
