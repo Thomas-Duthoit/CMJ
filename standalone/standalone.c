@@ -8,129 +8,133 @@
 
 #define CHEMIN_PAR_DEFAUT "./web/data/refresh-data.js"
 
-typedef struct  //definie la structure d'un joueur
+typedef struct  // player structure
 {
     int trait;
-    char pseudo[20];  //pseudo de 20 caractères max
-} T_joueur;
+    char pseudo[21];  // pseudo variable (20 char max + '\0')
+} T_Joueur;
 
-//int coup(T_Position *p);
-//void coupV2(T_Position *p);
-int coupV3(T_Position *p);
-int ecrireJSON(T_Position p, char *chemin);
+// int coup(T_Position *p);
+// void coupV2(T_Position *p);
+int coupV3(T_Position *p);  // prototype for the last version of the function to move piles
+int ecrireJSON(T_Position p, char *chemin);  // prototype of the function to write actual game state into a json file for avalam-refresh
 
-int main(int argc, char *argv[]) {  // Point d'entré du programme
+int main(int argc, char *argv[]) {  // program entry point
 
-    T_joueur joueur1 = {1, PSEUDO_PAR_DEFAUT_J1};  //   / Création des joueurs et initialisation aux valeurs par défaut
-    T_joueur joueur2 = {2, PSEUDO_PAR_DEFAUT_J2};  //  |
+    T_Joueur joueur1 = {1, PSEUDO_PAR_DEFAUT_J1};  //   / players creation
+    T_Joueur joueur2 = {2, PSEUDO_PAR_DEFAUT_J2};  //  |
 
-    T_Position p = getPositionInitiale();  // On récupére la position initiale du plateau
-    T_ListeCoups l = getCoupsLegaux(p);
-    T_Score s = {0, 0, 0, 0};  // Par défaut, les scores sont de 0 pour chaque joueurs
+    T_Position p = getPositionInitiale();  // getting the initial game position
+    T_ListeCoups l = getCoupsLegaux(p);  // and getting the list of legal moves from this position
+    T_Score s = evaluerScore(p);  // and defining the score variable
     
 
-    if (argc == 1) printf("Utilisation du fichier %s\n", CHEMIN_PAR_DEFAUT);
-    else printf("Utilisation du fichier %s\n", argv[1]);
+    if (argc == 1) printf("Utilisation du fichier %s\n", CHEMIN_PAR_DEFAUT);  // if no path is specified, we use the default one
+    else printf("Utilisation du fichier %s\n", argv[1]);  // else, we use the path specified as an argument
     printf("Continuer ?");
-    getchar();  // on attend que l'utilisateur appuie sur entré
+    getchar();  // we wait for the user to press 'enter' on his keyboard
 
-    // bonus/malus evolution:
+    // initializing evolution bonus/malus to UNKNOWN:
     p.evolution.bonusJ = UNKNOWN;
     p.evolution.bonusR = UNKNOWN;    
     p.evolution.malusJ = UNKNOWN;
     p.evolution.malusR = UNKNOWN;
 
+    // asking the players where they want to place their evolution pieces
     while (((0 <= p.evolution.bonusJ || p.evolution.bonusJ > NBCASES) && (p.evolution.bonusJ)%2 == 0) || p.evolution.bonusJ == UNKNOWN)
     {
         printf("\tbonusJ ? : ");
-        scanf("%hhd", &(p.evolution.bonusJ));  // hhd plutot que d car on veut des octets  (warning signalé par gcc)
+        scanf("%hhd", &(p.evolution.bonusJ));  // not %d but %hhd because we need bytes (warning and solution given by gcc)
     }
     while (((0 <= p.evolution.bonusR || p.evolution.bonusR > NBCASES) && (p.evolution.bonusR)%2) || p.evolution.bonusR == UNKNOWN)
     {
         printf("\tbonusR ? : ");
-        scanf("%hhd", &(p.evolution.bonusR));
+        scanf("%hhd", &(p.evolution.bonusR));  // not %d but %hhd because we need bytes (warning and solution given by gcc)
     }
     while (((0 <= p.evolution.malusJ || p.evolution.malusJ > NBCASES) && (p.evolution.malusJ)%2 == 0) || p.evolution.malusJ == p.evolution.bonusJ || p.evolution.malusJ == UNKNOWN)
     {
         printf("\tmalusJ ? : ");
-        scanf("%hhd", &(p.evolution.malusJ));
+        scanf("%hhd", &(p.evolution.malusJ));  // not %d but %hhd because we need bytes (warning and solution given by gcc)
     }
     while (((0 <= p.evolution.malusR || p.evolution.malusR > NBCASES) && (p.evolution.malusR)%2) || p.evolution.malusR == p.evolution.bonusR || p.evolution.malusR == UNKNOWN)
     {
         printf("\tmalusR ? : ");
-        scanf("%hhd", &(p.evolution.malusR));
+        scanf("%hhd", &(p.evolution.malusR));  // not %d but %hhd because we need bytes (warning and solution given by gcc)
     }
 
-    // on initialise le fichier json avant de commencer la partie 
-    if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  
-    else ecrireJSON(p, argv[1]);
+    // initializing the JSON file before we start the game so that avalam-refresh can display it
+    if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  // if no path specified, we use the default one
+    else ecrireJSON(p, argv[1]);  // else, we use the specified path
 
-    while (l.nb) // tant qu'il y a des coups légaux: on joue
+    // game loop:
+    while (l.nb)  // while there are legal moves, we play
     {
-        system("clear");
-        s = evaluerScore(p);
-        afficherScore(s);
-        printf("Trait aux %ss :\n", COLNAME(p.trait));
-        while (coupV3(&p)) {
-            system("clear");
-            s = evaluerScore(p);
-            afficherScore(s);
-            printf("Trait aux %ss :\n", COLNAME(p.trait));
+        system("clear");  // clearing the terminal
+        s = evaluerScore(p);  // updating score from the position
+        afficherScore(s);     // and displaying it
+        printf("Trait aux %ss :\n", COLNAME(p.trait));  // telling which player needs to play
+        while (coupV3(&p)) {  // while invalid moves are done  (coupV3 also apply move to position when the move is valid)
+            system("clear");  // clearing the terminal
+            s = evaluerScore(p);  // updating score
+            afficherScore(s);     // to display it
+            printf("Trait aux %ss :\n", COLNAME(p.trait));  // telling which player needs to play
         }
-        printf("nb coups possibles : %d", l.nb);
-        if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  
-        else ecrireJSON(p, argv[1]);
+        printf("nb coups possibles : %d", l.nb);  // number of legal moves remaining
+        // updating the JSON file after each move
+        if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  // if no path specified, we use the default one
+        else ecrireJSON(p, argv[1]);  // else, we use the specified path
+        // updating the list of available legal moves
         l = getCoupsLegaux(p);
     }
+    // the game is finished:
     printf("Partie finie !\nscore: ");
-    afficherScore(s);
-    if (s.nbJ > s.nbR) printf(" %s gagnent\n", joueur1.pseudo);
-    else if (s.nbJ < s.nbR) printf(" %s gagnent\n", joueur2.pseudo);
+    afficherScore(s);  // displaying score
+    if (s.nbJ > s.nbR) printf(" %s gagnent\n", joueur1.pseudo);  // player 1 wins
+    else if (s.nbJ < s.nbR) printf(" %s gagnent\n", joueur2.pseudo);  // player 2 wins
     else if (s.nbJ == s.nbR) {
-        if (s.nbJ5 > s.nbR5) printf(" %s gagnent\n", joueur1.pseudo);
-        else if (s.nbJ5 < s.nbR5) printf(" %s gagnent\n", joueur2.pseudo);
-        else printf(" Egalité\n");
+        if (s.nbJ5 > s.nbR5) printf(" %s gagnent\n", joueur1.pseudo);  // player 1 wins because he has more piles of 5
+        else if (s.nbJ5 < s.nbR5) printf(" %s gagnent\n", joueur2.pseudo);  // player 2 wins because he has more piles of 5
+        else printf(" Egalité\n");  // exact same scores
     }
     return 0;
 }
 
 
-int coupV3(T_Position *p) {
-    int depart, fin;
-    printf("\tcaseO ? : ");
-    scanf("%d", &depart);
-    printf("\tcaseD ? : ");
-    scanf("%d", &fin);  
-    if (estValide(*p, depart, fin)) *p = jouerCoup(*p, depart, fin);
-    else return 1;
-    printf("\tOn joue %d -> %d", depart, fin);
-    return 0;
+int coupV3(T_Position *p) {  // function to make moves
+    int depart, fin;  // decalring variables for the origin and end of the move
+    printf("\tcaseO ? : ");  // asking the player which pile to move
+    scanf("%d", &depart);  // getting the value with scanf
+    printf("\tcaseD ? : ");  // asking the player where to put that pile
+    scanf("%d", &fin);  // getting the value with scanf
+    if (estValide(*p, depart, fin)) *p = jouerCoup(*p, depart, fin);  // if the move is legal, we play it and we update the position variable
+    else return 1;  // else, we return 1 so the condition of the while in the main loop is true
+    printf("\tOn joue %d -> %d", depart, fin);  // printing which move was done
+    return 0;  // returning 0 (=the move is valid)
 }
 
 
-int ecrireJSON(T_Position p, char *chemin) {
-    FILE *fichier;
-    T_Score s = evaluerScore(p);
+int ecrireJSON(T_Position p, char *chemin) {  // function to write the game state into a json file
+    FILE *fichier;  // declaring variables
+    T_Score s = evaluerScore(p);  // getting the score from the position
     int i;
 
-    fichier = fopen(chemin, "w");
+    fichier = fopen(chemin, "w");  // opening the file
     CHECK_IF(fichier, NULL, chemin);  // security check
 
-    if (fichier==NULL) return 0;
-    fprintf(fichier, "traiterJson({\n");  // Initialisation du fichier JSON
-    fprintf(fichier, "\t"STR_TURN":%d,\n", p.trait); // Trait (Savoir qui joue)
+    fprintf(fichier, "traiterJson({\n");  // write the start of the json file
+    fprintf(fichier, "\t"STR_TURN":%d,\n", p.trait); // write which player needs to play
 
-    fprintf(fichier, "\t"STR_SCORE_J":%d,\n", s.nbJ);  // Ecrit le score des jaunes
-    fprintf(fichier, "\t"STR_SCORE_J5":%d,\n", s.nbJ5);  // Ecrit le nombre de colonnes 5 pieces des jaunes
-    fprintf(fichier, "\t"STR_SCORE_R":%d,\n", s.nbR);  // Eccrit le score des rouges
-    fprintf(fichier, "\t"STR_SCORE_R5":%d,\n", s.nbR5);  // Ecrit le nom de colonnes 5 pièces des rouges
+    fprintf(fichier, "\t"STR_SCORE_J":%d,\n", s.nbJ);  // write yellow's score
+    fprintf(fichier, "\t"STR_SCORE_J5":%d,\n", s.nbJ5);  // write the number of pile of 5 of yellow
+    fprintf(fichier, "\t"STR_SCORE_R":%d,\n", s.nbR);  // write red's score
+    fprintf(fichier, "\t"STR_SCORE_R5":%d,\n", s.nbR5);  // write the number of pile of 5 of red
 
-    fprintf(fichier, "\t"STR_BONUS_J":%d,\n", p.evolution.bonusJ);  // Ecrit la position du jeton evol Jaunes
-    fprintf(fichier, "\t"STR_MALUS_J":%d,\n", p.evolution.malusJ);  // Ecrit la position du jeton malus Jaunes
-    fprintf(fichier, "\t"STR_BONUS_R":%d,\n", p.evolution.bonusR);  // Ecrit la position du jeton evol Rouges
-    fprintf(fichier, "\t"STR_MALUS_R":%d,\n", p.evolution.malusR);  // Ecrit la position du jeton malus Rouges
+    fprintf(fichier, "\t"STR_BONUS_J":%d,\n", p.evolution.bonusJ);  // write the position of the yellow bonus piece
+    fprintf(fichier, "\t"STR_MALUS_J":%d,\n", p.evolution.malusJ);  // write the position of the yellow malus piece
+    fprintf(fichier, "\t"STR_BONUS_R":%d,\n", p.evolution.bonusR);  // write the position of the red bonus piece
+    fprintf(fichier, "\t"STR_MALUS_R":%d,\n", p.evolution.malusR);  // write the position of the red malus piece
 
-    fprintf(fichier, "\t"STR_COLS":[\n");  // Ecrit l'état des colonnes
+    fprintf(fichier, "\t"STR_COLS":[\n");  // write the columns state
     for (i = 0; i < NBCASES; i++)
     {
         fprintf(fichier, "\t\t{"STR_NB":%d, "STR_COULEUR":%d}", p.cols[i].nb, p.cols[i].couleur);
@@ -139,16 +143,16 @@ int ecrireJSON(T_Position p, char *chemin) {
     fprintf(fichier, "\n\t]\n");
     
     
-    fprintf(fichier, "});");
+    fprintf(fichier, "});");  // write the end of the json file
     
-    // fermer le fichier
+    // closing the file
     fclose(fichier);
     CHECK_DIF(fichier, NULL, chemin);  // security check
 
     return 1;
 }
 
-// première version de la fonction pour jouer un coup (marche pas)
+// first version of the function to move pieces (not working)
 /*
 int coup(T_Position *p){
     T_ListeCoups listecoup = getCoupsLegaux(*p);
@@ -165,6 +169,7 @@ int coup(T_Position *p){
 }
 */
 
+// second version (working but needed a rework)
 /*
 void coupV2(T_Position *p) {
     int depart, fin;
