@@ -4,10 +4,10 @@ Challenge moteur de jeu
 Le programme standalone se trouve dans le répertoire standalone et permet de jouer à deux joueur au jeu Avalam en ligne de commandes.
 
 Le programme diag permet de faire des représentations du plateau grâce à une chaine FEN :
-u d t q c pour les jaunes
-U D T Q C pour les rouges
-b,m,B,M pour indiquer si la colonne précédente comporte un pion évolution (bonus ou malus) 
-1 … n pour indiquer un nombre de colonnes vides
+- u d t q c pour les jaunes
+- U D T Q C pour les rouges
+- b,m,B,M pour indiquer si la colonne précédente comporte un pion évolution (bonus ou malus) 
+- 1 … n pour indiquer un nombre de colonnes vides
 
 Problèmes connues :
 
