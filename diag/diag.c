@@ -202,12 +202,12 @@ int main(int argc, char* argv[])
     }
     if(chemin[0] == '\0')  // Creating and writing the file depending of the user's input.
     {
-        printf0("Chemin non défini\n");
+        printf0("\nChemin non défini\n");
         ecrireJSON(p, CHEMIN_PAR_DEFAUT, d);
     }
     else
     {
-        printf0("Chemin défini");
+        printf0("\nChemin défini\n");
         ecrireJSON(p, chemin, d);
     }
     return 0;

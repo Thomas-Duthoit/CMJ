@@ -13,8 +13,8 @@ Problèmes connues :
 
 - Pour diag, il y a un problème concernant la redirection. Tout le fichier JSON s'écrit correctement, du moins son contenu. Cependant, le nom du fichier s'écrit avec une extension avec un caractère en trop qui n'est pas réellement affiché.Celui-ci n'apparait uniquement lorsque l'input dans le fichier pour les notes est présent. J'ai tenté de le retirer en émettant la possibilité que c'était '\n' mais ce n'était pas le cas.
 
--on se pose la question sur l'horodotage du makefile nous jouent des tours. Puisque si l'ont make et sans sauvgarder
-en faisant Ctrl+S et que l'ont fait make debug en suite il va prendre le fichier sans les printf0.
+- On se pose la question sur l'horodotage du makefile nous joue des tours. Puisque si on make, sans modifier le fichier
+ et qu'on fait make debug en suite, il ne va pas recompiler le fichier, car il est considéré comme uptodate. En conclusion, le mode debug ne sera pas activer. Nous sommes obligés de passer par un make clean au préalable.
 
 
 # Team Avalpierre (●´⌓`●)

@@ -79,4 +79,4 @@ Compréhension de l'utilisation des fprintf.
 - Ewen : Diag et de très très légères retouche sur standalone
 - Thomas : Standalone
 - Pierre : Mode debug de standalone
-- Dorian : Travail quasi inexistant
+- Dorian :

@@ -40,34 +40,34 @@ int main(int argc, char *argv[]) {  // program entry point
 
     // asking the players where they want to place their evolution pieces
     printf0("Demande aux joueurs où ils veulent placer leurs pièces d'évolution.\n");
-    printf0("demande au joueur jaune de placer le jeton bonus.\n");
+    printf0("Demande au joueur jaune de placer le jeton bonus.\n");
     while (((0 <= p.evolution.bonusJ || p.evolution.bonusJ > NBCASES) && (p.evolution.bonusJ)%2 == 0) || p.evolution.bonusJ == UNKNOWN)
     {
         printf("\tbonusJ ? : ");
         scanf("%hhd", &(p.evolution.bonusJ));  // not %d but %hhd because we need bytes (warning and solution given by gcc)
     }        
-    printf1("le jeton bonus jaune a été placé à la case %hhd\n", p.evolution.bonusJ);
-    printf0("demande au joueur rouge de placer le jeton bonus.\n");
+    printf1("Le jeton bonus jaune a été placé à la case %hhd\n", p.evolution.bonusJ);
+    printf0("Demande au joueur rouge de placer le jeton bonus.\n");
     while (((0 <= p.evolution.bonusR || p.evolution.bonusR > NBCASES) && (p.evolution.bonusR)%2) || p.evolution.bonusR == UNKNOWN)
     {
         printf("\tbonusR ? : ");
         scanf("%hhd", &(p.evolution.bonusR));  // not %d but %hhd because we need bytes (warning and solution given by gcc)
     }
-    printf1("le jeton bonus rouge a été placé à la case %hhd\n", p.evolution.bonusR);
-    printf0("demande au joueur jaune de placer le jeton malus.\n");
+    printf1("Le jeton bonus rouge a été placé à la case %hhd\n", p.evolution.bonusR);
+    printf0("Demande au joueur jaune de placer le jeton malus.\n");
     while (((0 <= p.evolution.malusJ || p.evolution.malusJ > NBCASES) && (p.evolution.malusJ)%2 == 0) || p.evolution.malusJ == p.evolution.bonusJ || p.evolution.malusJ == UNKNOWN)
     {
         printf("\tmalusJ ? : ");
         scanf("%hhd", &(p.evolution.malusJ));  // not %d but %hhd because we need bytes (warning and solution given by gcc)
     }
-    printf1("le jeton malus jaune a été placé à la case %hhd\n", p.evolution.malusJ);
-    printf0("demande au joueur rouge de placer le jeton malus.\n");
+    printf1("Le jeton malus jaune a été placé à la case %hhd\n", p.evolution.malusJ);
+    printf0("Demande au joueur rouge de placer le jeton malus.\n");
     while (((0 <= p.evolution.malusR || p.evolution.malusR > NBCASES) && (p.evolution.malusR)%2) || p.evolution.malusR == p.evolution.bonusR || p.evolution.malusR == UNKNOWN)
     {
         printf("\tmalusR ? : ");
         scanf("%hhd", &(p.evolution.malusR));  // not %d but %hhd because we need bytes (warning and solution given by gcc)
     }
-    printf1("le jeton malus rouge a été placé à la case %hhd\n", p.evolution.malusR);
+    printf1("Le jeton malus rouge a été placé à la case %hhd\n", p.evolution.malusR);
     // initializing the JSON file before we start the game so that avalam-refresh can display it
     printf0("Initialisation du fichier JSON...\n");
     if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  // if no path specified, we use the default one
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {  // program entry point
             afficherScore(s);     // to display it
             printf("Trait aux %ss :\n", COLNAME(p.trait));  // telling which player needs to play
         }
-        printf("nb coups possibles : %d", l.nb);  // number of legal moves remaining
+        printf("nb coups possibles : %d\n", l.nb);  // number of legal moves remaining
         // updating the JSON file after each move
         if (argc == 1) ecrireJSON(p, CHEMIN_PAR_DEFAUT);  // if no path specified, we use the default one
         else ecrireJSON(p, argv[1]);  // else, we use the specified path
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {  // program entry point
         l = getCoupsLegaux(p);
     }
     // the game is finished:
-    printf("Partie finie !\nscore: ");
+    printf("Partie finie !\nScore: ");
     afficherScore(s);  // displaying score
     if (s.nbJ > s.nbR) printf(" %s gagnent\n", joueur1.pseudo);  // player 1 wins
     else if (s.nbJ < s.nbR) printf(" %s gagnent\n", joueur2.pseudo);  // player 2 wins
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {  // program entry point
 
 int coupV3(T_Position *p) {  // function to make moves
     int depart, fin;  // decalring variables for the origin and end of the move
-    printf0("Demande au joueur qu'elle pile il veux deplacer.\n");
+    printf0("Demande au joueur quelle pile il veut déplacer.\n");
     printf("\tcaseO ? : ");  // asking the player which pile to move
     scanf("%d", &depart);  // getting the value with scanf
     printf0("Demande au joueur où il veut déplacer la pile.\n");
@@ -118,7 +118,7 @@ int coupV3(T_Position *p) {  // function to make moves
     scanf("%d", &fin);  // getting the value with scanf
     if (estValide(*p, depart, fin)) *p = jouerCoup(*p, depart, fin);  // if the move is legal, we play it and we update the position variable
     else return 1;  // else, we return 1 so the condition of the while in the main loop is true
-    printf("\tOn joue %d -> %d", depart, fin);  // printing which move was done
+    printf("\tOn joue %d -> %d\n", depart, fin);  // printing which move was done
     return 0;  // returning 0 (=the move is valid)
 }
 
