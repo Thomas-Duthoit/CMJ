@@ -5,6 +5,7 @@
 # Organisation
 Les modules seront à rendre en source en .c qui seront compilés en fichier objet pour permettre une compilation modulaire et de faire du versionning plus facilement
 
+La première version du joueur développée par la team Avalpierre sera le joueur6
 ---
 
 # /!\ A prioriser dans un premier temps
