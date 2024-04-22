@@ -6,11 +6,17 @@
 #include "moteur.h"
 
 
+#include "modules/test.h"
+
+
 void choisirCoup(T_Position currentPosition, T_ListeCoups listeCoups) {
-	int i; 
+	char i; // Astuce de Mr. Oxoby: un char est plus rapide car en incrémentant, on fait les calculs sur 1 octet et pas 4
 	octet o, d; 
 	octet myColor = currentPosition.trait; 
-
-    afficherListeCoups(listeCoups);  // Display all possible moves.
+    printf("démarrage du bot !\n");
+    getchar();
+    printf("TEST MODULE: %s", TEST);
+    printf("COLOR: %d\n", myColor);
+    ecrireIndexCoup(0);
 
 }
