@@ -14,7 +14,6 @@ Il faut développer en paralèlle les modules suivants:
 - Fonction choisirCoup (première version) avec ces modules (style joueur4.c)
 - Un makefile pour effectuer une compilation séparée du fichier source et des modules
 
-Après une mise en commun
+Après une mise en commun, on aura une première version du bot fonctionnel (?)
 
  ---
-
