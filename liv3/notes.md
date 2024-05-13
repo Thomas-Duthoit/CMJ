@@ -3,7 +3,7 @@
 ---
 
 # Organisation
-Les modules seront à rendre en source en .c qui seront compilés en fichier objet pour permettre une compilation modulaire et de faire du versionning plus facilement
+Les modules seront à rendre en source en .h qui seront inclus dans chaques versions des programmes et permettra de faire du versionning plus facilement
 
 La première version du joueur développée par la team Avalpierre sera le joueur6
 ---
