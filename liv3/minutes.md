@@ -15,8 +15,18 @@
 - Ecriture du module "superflu".
 - Début d'écriture du module "isolation".
 - Début d'écriture du module "num".
+- Bob-mk1 crée
 
-## 16 mai (Ewen) :
+## 16 mai (Groupe) :
 - Ecriture du module "dual_blindé".
 - Mise à jour du Trello pour la clarté.
-- Recherche de failles (tournois avec les anciens bots), 11/19 dans le classement 2022
+- Recherche de failles (tournois avec les anciens bots), 11/19 dans le classement 2022.
+- Début de la fonction d'évaluation.
+- Ecriture du module "eval_antiempile".
+
+## 17 mai (Thomas, Ewen, Pierre) :
+- Finition d'eval_antiempile.
+- Finition du module isolation.
+- Bob-mk2 crée (bien meilleur que mk1).
+- Réalisation du module "eval_antisabotage".
+- Tournoi contre les bots 2023: 6ème sur 17 en blitz de 3 secondes.
