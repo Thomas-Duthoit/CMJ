@@ -12,13 +12,12 @@ octet eval_fragilisation(T_Position currentPosition, octet o, octet d, octet maC
     T_Voisins voisins = getVoisins(o);  // Récup. des voisins
 	octet i, j;  // indice de boucle
 
-    for (i = 0; i < voisins.nb; i++)
-    {
-       if((currentPosition.cols[voisins.cases[i]].nb == 3) &&
-          (currentPosition.cols[voisins.cases[i]].couleur != maCouleur) &&
-          (currentPosition.cols[d].couleur != maCouleur) &&
-          (currentPosition.cols[d].nb != 3))
-          return 1;
-    }
+    if(currentPosition.cols[o].couleur != maCouleur)
+        for (i = 0; i < voisins.nb; i++)
+            if((currentPosition.cols[voisins.cases[i]].nb == 3) &&
+                (currentPosition.cols[voisins.cases[i]].couleur != maCouleur) &&
+                (currentPosition.cols[d].couleur != maCouleur) &&
+                (currentPosition.cols[d].nb != 3))
+                    return 1;
     return 0;
 }
