@@ -5,9 +5,6 @@
    - Renvoie 1 si ça fragilise la tour
    - Renvoie 0 sinon*/
 
-
-
-
 octet eval_fragilisation(T_Position currentPosition, octet o, octet d, octet maCouleur) {
     T_Voisins voisins = getVoisins(o);  // Récup. des voisins
 	octet i, j;  // indice de boucle

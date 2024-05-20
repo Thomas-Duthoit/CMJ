@@ -30,3 +30,10 @@
 - Bob-mk2 crée (bien meilleur que mk1).
 - Réalisation du module "eval_antisabotage".
 - Tournoi contre les bots 2023: 6ème sur 17 en blitz de 3 secondes.
+
+## 20 mai (Groupe) :
+- Rédaction du module "fragilisation".
+- Début de rédaction du CR.
+- Début de rédaction de la présentation.
+- Travail sur le module eval_num.
+- Implémentation du placement des jetons évolutions.
