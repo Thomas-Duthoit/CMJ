@@ -30,3 +30,11 @@
 - Bob-mk2 crée (bien meilleur que mk1).
 - Réalisation du module "eval_antisabotage".
 - Tournoi contre les bots 2023: 6ème sur 17 en blitz de 3 secondes.
+
+## 18 mai (Dorian) :
+- Amélioration du module eval_num (fonction global_num)
+
+## 19 mai (Thomas):
+- Correction de bugs du module eval_num (fonctions eval_num et global_num)
+
+  
