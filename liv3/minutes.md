@@ -44,3 +44,12 @@
 - Travail sur le module eval_num.
 - Implémentation du placement des jetons évolutions.
 
+## 21 mai midi (Ewen, Thomas, Pierre):
+- Résolution de bugs
+- Amélioration de Bob Mk3
+
+
+## 21 mai soir (Ewen, Thomas):
+- Implémentation de eval_fragilisation en coup direct
+- Bob_mk32 (bat tous les autres bob (dans les deux couleurs)).
+- Correction de bug jetons évolutions.
