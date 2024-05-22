@@ -53,3 +53,6 @@
 - Implémentation de eval_fragilisation en coup direct
 - Bob_mk32 (bat tous les autres bob (dans les deux couleurs)).
 - Correction de bug jetons évolutions.
+
+## 22 mai (Ewen, Thomas):
+- Reprise du bot mk2 pour rajouter le placement des pions évolutions.
